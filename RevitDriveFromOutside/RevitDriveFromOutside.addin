@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>RevitDriveFromOutside</Name>
+		<FullClassName>RevitDriveFromOutside.App</FullClassName>
+		<Assembly>RevitDriveFromOutside.dll</Assembly>
+		<AddInId>FC403ACB-1151-4068-A95B-1012AA7DE747</AddInId>
+		<VendorId>ALTR</VendorId>
+		<VendorDescription>alter_sunset</VendorDescription>
+	</AddIn>
+</RevitAddIns>
