@@ -41,9 +41,6 @@ namespace RevitDriveFromOutside
         {
             List<TaskConfig> configs = [];
             string[] files = Directory.GetFiles(FOLDER_CONFIGS);
-            if (files.Length == 0)
-                return null;
-
             foreach (string file in files)
             {
                 using FileStream fileStream = File.OpenRead(file);
