@@ -55,10 +55,11 @@ namespace RevitDriveFromOutside
                         .GetProperty("ExternalEvent")
                         .Deserialize<ExternalEvents>(),
 
-                    EventConfig = root.GetProperty("EventConfig")
+                    EventConfig = root.GetProperty("EventConfig"),
+
+                    FilePath = file
                 };
                 configs.Add(taskConfig);
-                File.Delete(file);
             }
             return configs;
         }
@@ -83,6 +84,7 @@ namespace RevitDriveFromOutside
                 default:
                     return;
             }
+            File.Delete(taskConfig.FilePath);
         }
     }
 }
