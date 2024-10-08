@@ -1,6 +1,6 @@
 # RevitDriveFromOutside
 
-  A lifelong dream has finally comes true!
+  A lifelong dream has finally come true!
   
   Using this template, you will be able to send commands to the Revit application from the outside!
 
