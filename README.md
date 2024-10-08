@@ -1,13 +1,13 @@
 # RevitDriveFromOutside
 
-  A lifelong dream finally comes true!
+  A lifelong dream has finally comes true!
   
-  With this template you can send commands to your Revit app from the outside!
+  Using this template, you will be able to send commands to the Revit application from the outside!
 
   Yeah, that would be awesome, though that's not exectly the case.
-  Yet, with this template you can achieve external control over your Revit to a certain extent.
+  Nevertheless, with this template, you can achieve some degree of external control over Revit.
 
-  Firstly you have to register all your external events, in some valid Revit context (ApplicationInitialized event in this case).
+  1. Register all your external events, in some valid Revit context (ApplicationInitialized event in this case).
   ```c#
 List<IEventHolder> events = [];
 events.Add(new TransmitEventHolder());
@@ -28,8 +28,8 @@ public enum ExternalEvents
 }
 ```
 
-  Then you have to deploy a listener that will monitor incoming messages.
-  (Here you have a simlpest solution I could think of: put config files (JSON) inside some folder, and tell your listener to periodically check for them).
+  2.Deploy a listener that will keep track of incoming messages.
+  (Here we have the simplest solution I could think of: put the configuration files (JSON) in some folder and tell your listener to check them periodically).
 ```c#
 ExternalTaskHandler externalTaskHandler = new(application, events);
 await externalTaskHandler.ListenForNewTasks(TimeSpan.FromMinutes(1));
@@ -41,7 +41,7 @@ public interface IExternalTaskHandler
     public List<TaskConfig> ReadMessages();
 }
 ```
-  Then chain together message reader and raising of your external event using config from a message.
+  3.Combine message reading and external event invocation using configuration from the message.
 ```c#
 public async Task ListenForNewTasks(TimeSpan period)
 {
