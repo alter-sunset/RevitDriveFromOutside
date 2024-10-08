@@ -28,7 +28,7 @@ public enum ExternalEvents
 }
 ```
 
-  2.Deploy a listener that will keep track of incoming messages.
+  2. Deploy a listener that will keep track of incoming messages.
   (Here we have the simplest solution I could think of: put the configuration files (JSON) in some folder and tell your listener to check them periodically).
 ```c#
 ExternalTaskHandler externalTaskHandler = new(application, events);
@@ -41,7 +41,7 @@ public interface IExternalTaskHandler
     public List<TaskConfig> ReadMessages();
 }
 ```
-  3.Combine message reading and external event invocation using configuration from the message.
+  3. Combine message reading and external event invocation using configuration from the message.
 ```c#
 public async Task ListenForNewTasks(TimeSpan period)
 {
