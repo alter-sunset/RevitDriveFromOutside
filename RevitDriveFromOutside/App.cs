@@ -21,9 +21,11 @@ namespace RevitDriveFromOutside
         private async void OnInitialized(object? sender, ApplicationInitializedEventArgs e)
         {
             //Initialize all External Events
-            List<IEventHolder> events = [];
-            events.Add(new TransmitEventHolder());
-            events.Add(new DetachEventHolder());
+            List<IEventHolder> events =
+            [
+                new TransmitEventHolder(),
+                new DetachEventHolder(),
+            ];
 
             //Initialize Task Handler and pass Event instances to it
             ExternalTaskHandler externalTaskHandler = new(events);
