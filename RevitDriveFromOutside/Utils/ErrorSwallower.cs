@@ -24,27 +24,18 @@ namespace RevitDriveFromOutside.Utils
         }
         private static void TaskDialogBoxShowingEvent(object sender, DialogBoxShowingEventArgs e)
         {
-            TaskDialogShowingEventArgs e2 = e as TaskDialogShowingEventArgs;
-
-            string dialogId = e2.DialogId;
-            int dialogResult;
-            bool isConfirm;
-
-            switch (dialogId)
+            if (e is TaskDialogShowingEventArgs dialogArgs)
             {
-                case "TaskDialog_Missing_Third_Party_Updaters":
-                case "TaskDialog_Missing_Third_Party_Updater":
-                    isConfirm = true;
-                    dialogResult = (int)TaskDialogResult.CommandLink1;
-                    break;
-                default:
-                    isConfirm = true;
-                    dialogResult = (int)TaskDialogResult.Close;
-                    break;
-            }
+                string dialogId = dialogArgs.DialogId;
+                int dialogResult = dialogId switch
+                {
+                    "TaskDialog_Missing_Third_Party_Updaters" => (int)TaskDialogResult.CommandLink1,
+                    "TaskDialog_Missing_Third_Party_Updater" => (int)TaskDialogResult.CommandLink1,
+                    _ => (int)TaskDialogResult.Close
+                };
 
-            if (isConfirm)
-                e2.OverrideResult(dialogResult);
+                dialogArgs.OverrideResult(dialogResult);
+            }
         }
         private static void Application_FailuresProcessing(object sender, FailuresProcessingEventArgs e)
         {
@@ -60,7 +51,7 @@ namespace RevitDriveFromOutside.Utils
             {
                 FailureSeverity fseverity = a.GetSeverity();
 
-                if (fseverity == FailureSeverity.Warning)
+                if (fseverity is FailureSeverity.Warning)
                     a.DeleteWarning(f);
                 else
                 {

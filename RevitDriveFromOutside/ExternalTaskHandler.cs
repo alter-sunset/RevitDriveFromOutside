@@ -11,12 +11,9 @@ namespace RevitDriveFromOutside
         private readonly List<IEventHolder> _eventHolders = eventHolders;
 
         private static readonly string FOLDER_CONFIGS = InitializeFolderConfigs();
-        private static string InitializeFolderConfigs()
-        {
-            return Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        private static string InitializeFolderConfigs() =>
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 @"RevitListener\Tasks");
-        }
         /// <summary>
         /// Method that will listen for new Tasks and run them accordingly
         /// </summary>
@@ -28,7 +25,7 @@ namespace RevitDriveFromOutside
             while (await timer.WaitForNextTickAsync())
             {
                 TaskConfig taskConfig = GetOldestMessage();
-                if (taskConfig != null)
+                if (taskConfig is not null)
                     RaiseEvent(taskConfig);
             }
         }
@@ -39,9 +36,7 @@ namespace RevitDriveFromOutside
         public static TaskConfig GetOldestMessage()
         {
             string[] files = [.. Directory.GetFiles(FOLDER_CONFIGS).OrderBy(File.GetLastWriteTime)];
-
-            if (files.Length == 0)
-                return null;
+            if (files.Length == 0) return null;
 
             using FileStream fileStream = File.OpenRead(files[0]);
             using JsonDocument document = JsonDocument.Parse(fileStream);
@@ -58,8 +53,7 @@ namespace RevitDriveFromOutside
         {
             IEventHolder eventHolder = _eventHolders
                 .FirstOrDefault(e => e.ExternalEvent == taskConfig.ExternalEvent);
-            if (eventHolder is null)
-                return;
+            if (eventHolder is null) return;
 
             // Create a dictionary mapping external events to their handlers
             Dictionary<ExternalEvents, Action> eventHandlers = new()
@@ -82,9 +76,7 @@ namespace RevitDriveFromOutside
 
             // Invoke the appropriate event handler if it exists
             if (eventHandlers.TryGetValue(taskConfig.ExternalEvent, out var raiseEvent))
-            {
                 raiseEvent();
-            }
 
             // Delete the file after raising the event
             File.Delete(taskConfig.FilePath);
