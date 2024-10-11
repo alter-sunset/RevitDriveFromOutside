@@ -9,9 +9,11 @@
 
   1. Register all your external events, in some valid Revit context (ApplicationInitialized event in this case).
   ```c#
-List<IEventHolder> events = [];
-events.Add(new TransmitEventHolder());
-events.Add(new DetachEventHolder());
+List<IEventHolder> events =
+[
+    new TransmitEventHolder(),
+    new DetachEventHolder(),
+];
 ```
 ```c#
 public interface IEventHolder
