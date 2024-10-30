@@ -6,9 +6,9 @@ using RevitDriveFromOutside.Utils;
 
 namespace RevitDriveFromOutside
 {
-    public class ExternalTaskHandler(List<IEventHolder> eventHolders)
+    public class ExternalTaskHandler(IEventHolder[] eventHolders)
     {
-        private readonly List<IEventHolder> _eventHolders = eventHolders;
+        private readonly IEventHolder[] _eventHolders = eventHolders;
 
         private static readonly string FOLDER_CONFIGS = InitializeFolderConfigs();
         private static string InitializeFolderConfigs() =>

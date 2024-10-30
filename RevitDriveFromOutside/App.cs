@@ -21,7 +21,7 @@ namespace RevitDriveFromOutside
         private async void OnInitialized(object? sender, ApplicationInitializedEventArgs e)
         {
             //Initialize all External Events
-            List<IEventHolder> events =
+            IEventHolder[] events =
             [
                 new TransmitEventHolder(),
                 new DetachEventHolder(),

@@ -2,7 +2,7 @@
 {
     public class DetachConfig
     {
-        public List<string> Files { get; set; }
+        public string[] Files { get; set; }
         public string FolderPath { get; set; }
         public string MaskInName { get; set; }
         public string MaskOutName { get; set; }
