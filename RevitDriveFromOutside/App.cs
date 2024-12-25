@@ -31,7 +31,11 @@ namespace RevitDriveFromOutside
             ExternalTaskHandler externalTaskHandler = new(events);
 
             //Start listener, duh
+#if R25_OR_GREATER
             await externalTaskHandler.LookForSingleTask(TimeSpan.FromMinutes(1));
+#else
+            externalTaskHandler.LookForSingleTask(TimeSpan.FromMinutes(1));
+#endif
         }
 
         public Result OnShutdown(UIControlledApplication app)

@@ -108,6 +108,7 @@ namespace RevitDriveFromOutside.Utils
 
             t.Commit();
         }
+#if R24_OR_GREATER
         /// <summary>
         /// Purge all unused elements in the Document
         /// </summary>
@@ -135,6 +136,8 @@ namespace RevitDriveFromOutside.Utils
             }
             catch { }
         }
+#endif
+#if R22_OR_GREATER
         public static void RemoveEmptyWorksets(this Document document)
         {
             ICollection<WorksetId> worksets = new FilteredWorksetCollector(document)
@@ -154,5 +157,6 @@ namespace RevitDriveFromOutside.Utils
             }
             transaction.Commit();
         }
+#endif
     }
 }

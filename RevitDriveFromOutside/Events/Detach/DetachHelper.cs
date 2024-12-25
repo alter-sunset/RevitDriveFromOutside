@@ -49,12 +49,14 @@ namespace RevitDriveFromOutside.Events.Detach
         private static void ProcessDocument(Document document, DetachConfig detachConfig)
         {
             document.DeleteAllLinks();
-
+#if R22_OR_GREATER
             if (detachConfig.RemoveEmptyWorksets && document.IsWorkshared)
                 document.RemoveEmptyWorksets();
-
+#endif
+#if R24_OR_GREATER
             if (detachConfig.Purge)
                 document.PurgeAll();
+#endif
         }
         private static string GetDetachedFilePath(DetachConfig detachConfig, Document document, string originalFilePath)
         {

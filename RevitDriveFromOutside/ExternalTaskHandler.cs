@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RevitDriveFromOutside.Events;
 using RevitDriveFromOutside.Events.Detach;
 using RevitDriveFromOutside.Events.Transmit;
@@ -19,33 +20,48 @@ namespace RevitDriveFromOutside
         /// </summary>
         /// <param name="period">Frequency of method execution</param>
         /// <returns></returns>
+#if R25_OR_GREATER
         public async Task LookForSingleTask(TimeSpan period)
         {
             using PeriodicTimer timer = new(period);
             while (await timer.WaitForNextTickAsync())
             {
-                TaskConfig taskConfig = GetOldestMessage();
+                TaskConfig? taskConfig = GetOldestMessage();
                 if (taskConfig is not null)
                     RaiseEvent(taskConfig);
             }
         }
-        /// <summary>
-        /// This will get the oldest file from folder
-        /// </summary>
-        /// <returns></returns>
+#else
+        public void LookForSingleTask(TimeSpan period)
+        {
+            Timer timer = null;
+
+            timer = new Timer(_ =>
+            {
+                TaskConfig taskConfig = GetOldestMessage();
+                if (taskConfig is not null)
+                    RaiseEvent(taskConfig);
+            },
+            null, TimeSpan.Zero, period);
+        }
+
+#endif
         public static TaskConfig GetOldestMessage()
         {
-            string[] files = [.. Directory.GetFiles(FOLDER_CONFIGS).OrderBy(File.GetLastWriteTime)];
+            string[] files = Directory.GetFiles(FOLDER_CONFIGS)
+                .OrderBy(File.GetLastWriteTime)
+                .ToArray();
+
             if (files.Length == 0) return null;
 
-            using FileStream fileStream = File.OpenRead(files[0]);
-            using JsonDocument document = JsonDocument.Parse(fileStream);
-            JsonElement root = document.RootElement;
+            using StreamReader fileStream = File.OpenText(files[0]);
+            using JsonTextReader reader = new(fileStream);
+            JObject jsonObject = JObject.Load(reader);
 
             return new TaskConfig
             {
-                ExternalEvent = root.GetProperty("ExternalEvent").Deserialize<ExternalEvents>(),
-                EventConfig = root.GetProperty("EventConfig"),
+                ExternalEvent = jsonObject["ExternalEvent"].ToObject<ExternalEvents>(),
+                EventConfig = jsonObject["EventConfig"],
                 FilePath = files[0]
             };
         }
